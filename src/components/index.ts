@@ -15,6 +15,7 @@ import ValidationModel from './Model/ValidationModel';
 import TextSeemore from './TextMore/TextSeemore';
 import CongratulationScreen from './CongratulationScreen/CongratulationScreen';
 import RewardCards from './Cards/RewardCards';
+import BookCards from './Cards/BookCards';
 export {
   LargeButton,
   ProductCard,
@@ -32,5 +33,6 @@ export {
   ValidationModel,
   TextSeemore,
   CongratulationScreen,
-  RewardCards
+  RewardCards,
+  BookCards
 };

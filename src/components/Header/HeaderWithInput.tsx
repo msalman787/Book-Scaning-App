@@ -20,12 +20,15 @@ const HeaderWithSearchInput = ({
   image,
   showIcon,
   titleStyle,
-  titleColor
+  titleColor,
+  secondIcon,
+  onSecondIconPress,
 }: any) => {
   const Icon = image;
+  const Icon2 = secondIcon;
   return (
     <View style={styles.container}>
-      <BackButton onBackBtnPress={onBackBtnPress} />
+      {onBackBtnPress && <BackButton onBackBtnPress={onBackBtnPress} />}
       {!isInputVisible && (
         <View style={styles.titleContainer}>
           <Text
@@ -33,7 +36,7 @@ const HeaderWithSearchInput = ({
               styles.title,
               {
                 marginRight: titleStyle ? titleStyle : 0,
-                color: titleColor ? Colors.DEFAULT_WHITE : Colors.DEFAULT_BLACK
+                color: titleColor ? Colors.DEFAULT_WHITE : Colors.DEFAULT_BLACK,
               },
             ]}>
             {title}
@@ -43,21 +46,31 @@ const HeaderWithSearchInput = ({
               <Icon color="black" style={styles.searchIcon} />
             </TouchableOpacity>
           )}
+          {secondIcon && (
+            <TouchableOpacity style={styles.icon} onPress={onSecondIconPress}>
+              <Icon2 color="black" style={styles.searchIcon} />
+            </TouchableOpacity>
+          )}
         </View>
       )}
       {isInputVisible && (
         <View style={styles.inputContainer}>
           <TextInput
-            cursorColor={Colors.INPUT_BORDER}
+            cursorColor={Colors.DEFAULT_BLACK}
             style={styles.textInput}
             value={searchText}
             onChangeText={onSearchTextChange}
             autoFocus={true}
             placeholder="Search..."
           />
-          {showIcon && (
+          {secondIcon && (
             <TouchableOpacity style={styles.icon} onPress={onIconPress}>
               <Icon color="black" style={styles.searchIcon} />
+            </TouchableOpacity>
+          )}
+          {showIcon && (
+            <TouchableOpacity style={styles.icon} onPress={onSecondIconPress}>
+              <Icon2 color="black" style={styles.searchIcon} />
             </TouchableOpacity>
           )}
         </View>

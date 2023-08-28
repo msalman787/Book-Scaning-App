@@ -18,6 +18,7 @@ import VerifyProduct from './home/verifyProduct/VerifyProduct';
 import WinRewards from './home/winRewards/WinRewards';
 import RadeemReward from './home/complainCenter/RadeemReward';
 import SpinAndWin from './home/spinWin/SpinAndWin';
+import AllBooks from './home/AllBooks/AllBooks';
 //other screens
 import ProfileScreen from './profile/ProfileScreen';
 import NotificationScreen from './notification/NotificationScreen';
@@ -45,5 +46,6 @@ export {
   VerifyProduct,
   WinRewards,
   RadeemReward,
-  SpinAndWin
+  SpinAndWin,
+  AllBooks
 };

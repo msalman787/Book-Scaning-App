@@ -1,10 +1,19 @@
 import React, {useState} from 'react';
-import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {DynamicStatusBar, HeaderWithSearchInput, StoreCards} from '../../../components';
+import {
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {
+  DynamicStatusBar,
+  HeaderWithSearchInput,
+  BookCards,
+} from '../../../components';
 import {Colors, Images} from '../../../constants';
-import { verticalScale} from '../../../utils/Dimentions';
-const AllProducts = ({navigation}: any) => {
+import {verticalScale} from '../../../utils/Dimentions';
+const AllBooks = ({navigation}: any) => {
   const [isInputVisible, setInputVisible] = useState(false);
+
   const handleToggleInput = () => {
     if (isInputVisible) {
       setInputVisible(!isInputVisible);
@@ -16,87 +25,80 @@ const AllProducts = ({navigation}: any) => {
     {
       id: '1',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '2',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '3',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '4',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '5',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '6',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
     {
       id: '7',
       image: Images.StoreImg,
-      title: 'Smoke shop superstore ',
-      description: '5701 w 29th ave, illinois, 60559',
-      phone: '+92 1234556005',
+      title: 'Goodnight, Goodnight Construction Site',
+      authors: 'Sherri Duskey Rinker',
+      publisher:"Chronicle Books Llc",
+      publishedDate:"2011-05-04"
     },
   ];
   const [searchText, setSearchText] = useState('');
-
-  const handleCloseInput = () => {
-    navigation.goBack();
-  };
 
   const handleSearchTextChange = (text: any) => {
     setSearchText(text);
   };
 
   const renderCardRow = ({item}: any) => (
-    <StoreCards
+    <BookCards
       title={item.title}
-      description={item.description}
+      authors={item.authors}
       image={item.image}
-      phone={item.phone}
+      publisher={item.publisher}
+      publishedDate={item.publishedDate}
     />
   );
 
   return (
     <View style={styles.container}>
-      <DynamicStatusBar/>
-      {/* <View style={styles.header}>
-        <HeaderWithSearchInput
-          image={Images.StoreLocation}
-          onIconPress={handleToggleInput}
-          searchText={searchText}
-          isInputVisible={true}
-          showIcon={true}
-          onSearchTextChange={handleSearchTextChange}
-          title="Stores"
-          onBackBtnPress={handleCloseInput}
-        />
-      </View> */}
+      <DynamicStatusBar />
+
       <View style={styles.header}>
         <HeaderWithSearchInput
           image={Images.Search}
@@ -137,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllProducts;
+export default AllBooks;

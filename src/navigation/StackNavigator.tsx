@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomTabNavigation from './BottomTabNavigation';
 import {
+  AllBooks,
   AllProducts,
   ComplainCenterScreen,
   ComplainDetails,
@@ -51,7 +52,12 @@ const StackNavigator = () => {
 
   return (
     <Stack.Navigator>
-      {initialLaunch ? (
+      <Stack.Screen
+        name="AllBooks"
+        component={AllBooks}
+        options={{headerShown: false}}
+      />
+      {/* {initialLaunch ? (
         <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}
@@ -155,8 +161,8 @@ const StackNavigator = () => {
             component={LicenseIdScreen}
             options={{headerShown: false}}
           />
-        </>
-      )}
+        </> 
+      )} */}
     </Stack.Navigator>
   );
 };
