@@ -19,6 +19,7 @@ import WinRewards from './home/winRewards/WinRewards';
 import RadeemReward from './home/complainCenter/RadeemReward';
 import SpinAndWin from './home/spinWin/SpinAndWin';
 import AllBooks from './home/AllBooks/AllBooks';
+import Scanner from './home/AllBooks/Scanner';
 //other screens
 import ProfileScreen from './profile/ProfileScreen';
 import NotificationScreen from './notification/NotificationScreen';
@@ -47,5 +48,6 @@ export {
   WinRewards,
   RadeemReward,
   SpinAndWin,
-  AllBooks
+  AllBooks,
+  Scanner
 };

@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {
   DynamicStatusBar,
   HeaderWithSearchInput,
@@ -27,62 +23,65 @@ const AllBooks = ({navigation}: any) => {
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '2',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '3',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '4',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '5',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '6',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
     {
       id: '7',
       image: Images.StoreImg,
       title: 'Goodnight, Goodnight Construction Site',
       authors: 'Sherri Duskey Rinker',
-      publisher:"Chronicle Books Llc",
-      publishedDate:"2011-05-04"
+      publisher: 'Chronicle Books Llc',
+      publishedDate: '2011-05-04',
     },
   ];
   const [searchText, setSearchText] = useState('');
 
   const handleSearchTextChange = (text: any) => {
     setSearchText(text);
+  };
+  const onSecondIconPress = async () => {
+    await navigation.navigate('Scanner');
   };
 
   const renderCardRow = ({item}: any) => (
@@ -101,6 +100,7 @@ const AllBooks = ({navigation}: any) => {
 
       <View style={styles.header}>
         <HeaderWithSearchInput
+          onSecondIconPress={onSecondIconPress}
           image={Images.Search}
           secondIcon={Images.List}
           onIconPress={handleToggleInput}

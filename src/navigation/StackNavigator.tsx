@@ -13,6 +13,7 @@ import {
   PrivacyAndPolicyScreen,
   ProductDetails,
   RadeemReward,
+  Scanner,
   SignInScreen,
   SignUpScreen,
   SpinAndWin,
@@ -55,6 +56,11 @@ const StackNavigator = () => {
       <Stack.Screen
         name="AllBooks"
         component={AllBooks}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Scanner"
+        component={Scanner}
         options={{headerShown: false}}
       />
       {/* {initialLaunch ? (
