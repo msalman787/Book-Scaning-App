@@ -7,11 +7,34 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Share,
 } from 'react-native';
 import {Colors, Fonts, Images} from '../../constants';
 
 const BookCards = ({title, authors, publisher, publishedDate}: any) => {
-
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: title,
+      });
+  
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Shared successfully
+          console.log('Shared successfully');
+        } else {
+          // Shared successfully
+          console.log('Shared successfully');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Share dismissed
+        console.log('Share dismissed');
+      }
+    } catch (error:any) {
+      console.error('Error sharing text:', error.message);
+    }
+  };
+  
   return (
     <View style={styles.card}>
       <View style={styles.rowContainer}>
@@ -36,7 +59,7 @@ const BookCards = ({title, authors, publisher, publishedDate}: any) => {
       <View style={styles.horizontalBorder} />
       <View style={styles.rowContainer}>
         <Text style={styles.publisher}>Publisher: {publisher}</Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onShare}>
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
       </View>
