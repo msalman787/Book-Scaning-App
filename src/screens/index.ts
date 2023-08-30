@@ -25,6 +25,7 @@ import ProfileScreen from './profile/ProfileScreen';
 import NotificationScreen from './notification/NotificationScreen';
 import LikeScreen from './like/LikeScreen';
 import AddToCardScreen from './AddToCard/AddToCardScreen';
+import BookDetails from './home/AllBooks/BookDetail';
 export {
   HomeScreen,
   ProfileScreen,
@@ -49,5 +50,6 @@ export {
   RadeemReward,
   SpinAndWin,
   AllBooks,
-  Scanner
+  Scanner,
+  BookDetails,
 };

@@ -1,41 +1,75 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-  Alert,
-} from 'react-native';
-import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-// import {RNCamera} from 'react-native-camera';
-import { Colors, Fonts } from '../../../constants';
+import {Colors, Fonts, Images} from '../../../constants';
+import axios from 'axios';
+import {ValidationModel} from '../../../components';
 
 const Scanner = ({navigation}: any) => {
-
+  const [state, setState] = useState({
+    title: 'Sorry!',
+    bgColor: '',
+    image: Images.WrongIcon,
+    description: 'Book information not found for this ISBN.',
+    buttonText: 'Ok',
+    isValidate: false,
+  });
   const onSuccess = async (e: any) => {
-    try {
-      if (e.data) {
+    if (!e.data) return;
+    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${e.data}`;
 
-        navigation.goBack();
-      }
+    try {
+      axios
+        .get(apiUrl)
+        .then(async (response: any) => {
+          let result = JSON.parse(response.request._response);
+          if (result?.items) {
+            console.log("if",result)
+            return await navigation.navigate('BookDetails', {result});
+          } else {
+            console.log("else",result)
+            return setState(prevState => ({
+              ...prevState,
+              isValidate: !prevState.isValidate,
+            }));
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleHideModal = () => {
+    setState(prevState => ({
+      ...prevState,
+      isValidate: !prevState.isValidate,
+    }));
+  };
+
   return (
-    <QRCodeScanner
-      onRead={(e: any) => onSuccess(e)}
-      showMarker={true}
-      // reactivate={true}
-      // flashMode={RNCamera.Constants.FlashMode.torch}
-      topContent={
-        <Text style={styles.centerText}>
-          Scan your book ISBN no 
-        </Text>
-      }
-    />
+    <>
+      <ValidationModel
+        isVisible={state.isValidate}
+        modalImage={state.image}
+        title={state.title}
+        bgColor={state.bgColor}
+        description={state.description}
+        onClose={handleHideModal}
+        buttonText={state.buttonText}
+      />
+      <QRCodeScanner
+        onRead={(e: any) => onSuccess(e)}
+        showMarker={true}
+        reactivate={true}
+        reactivateTimeout={4000}
+        topContent={
+          <Text style={styles.centerText}>Scan your book ISBN no</Text>
+        }
+      />
+    </>
   );
 };
 

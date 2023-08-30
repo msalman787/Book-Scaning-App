@@ -48,7 +48,7 @@ const HeaderWithSearchInput = ({
           )}
           {secondIcon && (
             <TouchableOpacity style={styles.icon} onPress={onSecondIconPress}>
-              <Icon2 color="black" style={styles.searchIcon} />
+              <Icon2 color="black" style={styles.searchIcon2} />
             </TouchableOpacity>
           )}
         </View>
@@ -70,7 +70,7 @@ const HeaderWithSearchInput = ({
           )}
           {showIcon && (
             <TouchableOpacity style={styles.icon} onPress={onSecondIconPress}>
-              <Icon2 color="black" style={styles.searchIcon} />
+              <Icon2 color="black" style={styles.searchIcon2} />
             </TouchableOpacity>
           )}
         </View>
@@ -98,6 +98,11 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     margin: 10,
+  },
+  searchIcon2: {
+    margin: 10,
+    width:35,
+    height:35,
   },
   inputContainer: {
     flex: 1,

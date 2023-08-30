@@ -18,7 +18,7 @@ const LargeButton = (props: any) => {
           {
             backgroundColor: props.colorChanger
               ? Colors.DEFAULT_WHITE
-              : '#121212'
+              : Colors.NEW_THEME
           },
         ]}
         onPress={props.onPress}
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   signInButton: {
     width: '100%',
     height: 50,
-    backgroundColor: Colors.DEFAULT_BLACK,
+    backgroundColor: Colors.NEW_THEME,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 6,

@@ -5,6 +5,7 @@ import BottomTabNavigation from './BottomTabNavigation';
 import {
   AllBooks,
   AllProducts,
+  BookDetails,
   ComplainCenterScreen,
   ComplainDetails,
   LicenseIdScreen,
@@ -56,6 +57,11 @@ const StackNavigator = () => {
       <Stack.Screen
         name="AllBooks"
         component={AllBooks}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BookDetails"
+        component={BookDetails}
         options={{headerShown: false}}
       />
       <Stack.Screen

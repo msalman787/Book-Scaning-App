@@ -1,5 +1,6 @@
 export default {
   DEFAULT_BLACK: '#000000',
+  NEW_THEME: 'rgba(250, 164, 41, 1)',
   DEFAULT_WHITE: '#FFFFFF',
   LIGHT_GRAY: '#9B9B9B',
   INPUT_BORDER: '#A1A1A1',

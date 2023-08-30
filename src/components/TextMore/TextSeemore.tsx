@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   seeMoreButton: {
-    color: 'rgba(66, 75, 238, 1)',
+    color: 'rgba(0, 0, 113, 1)',
     fontFamily: Fonts.POPPINS_REGULAR,
     fontSize: 12,
   },

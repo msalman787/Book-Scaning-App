@@ -29,7 +29,7 @@ const AllBooks = ({navigation}: any) => {
     {
       id: '2',
       image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
+      title: 'Zero To One',
       authors: 'Sherri Duskey Rinker',
       publisher: 'Chronicle Books Llc',
       publishedDate: '2011-05-04',
@@ -45,7 +45,7 @@ const AllBooks = ({navigation}: any) => {
     {
       id: '4',
       image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
+      title: 'Zero To One',
       authors: 'Sherri Duskey Rinker',
       publisher: 'Chronicle Books Llc',
       publishedDate: '2011-05-04',
@@ -61,7 +61,7 @@ const AllBooks = ({navigation}: any) => {
     {
       id: '6',
       image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
+      title: 'Zero To One',
       authors: 'Sherri Duskey Rinker',
       publisher: 'Chronicle Books Llc',
       publishedDate: '2011-05-04',
@@ -80,6 +80,9 @@ const AllBooks = ({navigation}: any) => {
   const handleSearchTextChange = (text: any) => {
     setSearchText(text);
   };
+  const filteredData = data.filter((item: any) =>
+    item?.title?.toLowerCase().includes(searchText.toLowerCase()),
+  );
   const onSecondIconPress = async () => {
     await navigation.navigate('Scanner');
   };
@@ -102,7 +105,7 @@ const AllBooks = ({navigation}: any) => {
         <HeaderWithSearchInput
           onSecondIconPress={onSecondIconPress}
           image={Images.Search}
-          secondIcon={Images.List}
+          secondIcon={Images.Barcode}
           onIconPress={handleToggleInput}
           searchText={searchText}
           isInputVisible={isInputVisible}
@@ -114,7 +117,7 @@ const AllBooks = ({navigation}: any) => {
       </View>
       <View style={styles.cardsContainer}>
         <FlatList
-          data={data}
+          data={filteredData}
           renderItem={renderCardRow}
           keyExtractor={item => item.id}
         />
@@ -135,7 +138,7 @@ const styles = StyleSheet.create({
   cardsContainer: {
     paddingVertical: verticalScale(5),
     paddingHorizontal: verticalScale(10),
-    paddingBottom: 100,
+    paddingBottom: 75,
   },
 });
 

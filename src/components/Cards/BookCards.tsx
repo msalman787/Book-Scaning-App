@@ -46,7 +46,7 @@ const BookCards = ({title, authors, publisher, publishedDate}: any) => {
 
 const styles = StyleSheet.create({
   card: {
-    margin: 10,
+    marginVertical: 5,
     backgroundColor: Colors.DEFAULT_WHITE,
     borderRadius: 8,
     padding: 16,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 100,
-    height: 100,
+    height: 120,
     marginRight: 16,
     borderRadius: 8,
   },

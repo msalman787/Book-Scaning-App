@@ -6,10 +6,12 @@ import {
   StyleSheet,
   Button,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {Colors, Fonts} from '../../constants';
 import {horizontalScale, verticalScale} from '../../utils/Dimentions';
 import LargeButton from '../Buttons/Button';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Model = ({
   isVisible,
@@ -20,35 +22,47 @@ const Model = ({
   modalImage,
   onPageRedirect,
 }: any) => {
-  const ModalImage = modalImage;
+  // const ModalImage = modalImage;
   return (
     <Modal
       visible={isVisible}
       animationType="fade"
       transparent={true}
       onRequestClose={onClose}>
-      <TouchableOpacity style={styles.modalContainer} onPress={onClose}>
-        <View
-          style={styles.modalContent}
-          onStartShouldSetResponder={() => true}>
-          <ModalImage style={styles.image} />
-          {title && <Text style={styles.title}>{title}</Text>}
-          <Text style={styles.description}>{description}</Text>
-          <TouchableOpacity style={{height: 50, width: 320}}>
-            <LargeButton
-              onPress={onPageRedirect || onClose}
-              text={buttonText}
+      <ScrollView contentContainerStyle={styles.container}>
+        <TouchableOpacity style={styles.modalContainer} onPress={onClose}>
+          <View
+            style={styles.modalContent}
+            onStartShouldSetResponder={() => true}>
+            <Image
+              source={{
+                uri: modalImage,
+              }}
+              style={styles.image}
             />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.description}>{description}</Text>
+            <TouchableOpacity style={{height: 50, width: 320}}>
+              <LargeButton
+                onPress={onPageRedirect || onClose}
+                text={buttonText}
+              />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   modalContainer: {
     flex: 1,
+    paddingVertical:10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -61,8 +75,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 250,
+    borderRadius: 8,
   },
   title: {
     fontSize: 22,
