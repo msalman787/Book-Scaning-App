@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
 import {
   FlatList,
-  Linking,
   PermissionsAndroid,
-  Platform,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
@@ -19,14 +15,15 @@ import {Colors, Images} from '../../../constants';
 import {verticalScale} from '../../../utils/Dimentions';
 import {writeFile, readFile, DownloadDirectoryPath} from 'react-native-fs';
 import XLSX from 'xlsx';
+import DeviceInfo from 'react-native-device-info';
 
 const AllBooks = ({navigation}: any) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isModelVisible, setIsModelVisible] = useState(false);
-  const [state, setState] = useState({
-    isValidate: false,
-  });
-
+  const uniqueId:any = DeviceInfo.getAndroidId();
+// test phone id: 012493c7e8051e75
+// My phone id: 883a64c6f5b2c0c3
+  console.log(uniqueId._j);
   const handleToggleInput = () => {
     if (isInputVisible) {
       setInputVisible(!isInputVisible);
