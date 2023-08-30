@@ -34,6 +34,7 @@ import Congratulation from '../assets/images/svgs/congratulation.svg'
 import Share from '../assets/images/svgs/share.svg'
 import InviteUser from '../assets/images/svgs/inviteUser.svg'
 import Barcode from '../assets/images/svgs/barcode-scan.svg'
+import Download from '../assets/images/svgs/download.svg'
 
 export default {
   Lock,
@@ -71,6 +72,7 @@ export default {
   Share,
   InviteUser,
   Barcode,
+  Download,
   PoshMaker:require('../assets/images/poshmarker.png'),
   Logo : require('../assets/images/logo.png'),
   WinRewards : require('../assets/images/win_rewards.png')

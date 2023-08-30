@@ -17,7 +17,7 @@ import {
 const BookDetails = ({navigation, route}: any) => {
   const {result} = route.params;
   const authors = result?.items[0]?.volumeInfo?.authors;
-  console.log(authors);
+  // console.log(authors);
   const authorsString = authors && authors.join(', ');
   const handleCloseInput = () => {
     navigation.goBack();

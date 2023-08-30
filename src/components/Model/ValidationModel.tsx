@@ -41,7 +41,7 @@ const ValidationModel = ({
           <View style={{height: 50, width: 320, borderColor: 'pink'}}>
             <LargeButton
               colorChanger={true}
-              onPress={bgColor ? onPageRedirect : onClose}
+              onPress={onClose ? onClose : onPageRedirect}
               text={buttonText}
             />
           </View>
