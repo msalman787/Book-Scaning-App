@@ -16,17 +16,17 @@ import {Colors, Fonts, Images} from '../../../constants';
 import {verticalScale} from '../../../utils/Dimentions';
 import {writeFile, readFile, DownloadDirectoryPath} from 'react-native-fs';
 import XLSX from 'xlsx';
-import DeviceInfo from 'react-native-device-info';
+// import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AllBooks = ({navigation}: any) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isModelVisible, setIsModelVisible] = useState(false);
-  const uniqueId: any = DeviceInfo.getAndroidId();
+  // const uniqueId: any = DeviceInfo.getAndroidId();
   const [bookData, setBookData] = useState<any | []>([]);
   // test phone id: 012493c7e8051e75
   // My phone id: 883a64c6f5b2c0c3
-  console.log(uniqueId._j);
+  // console.log(uniqueId._j);
   const handleToggleInput = () => {
     if (isInputVisible) {
       setInputVisible(!isInputVisible);
@@ -46,13 +46,14 @@ const AllBooks = ({navigation}: any) => {
         // Ask for permission
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Storage permission needed',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-            message: 'hello world',
-          },
+            {
+            title: 'Permission Required',
+            buttonNeutral: 'Remind Me Later',
+            buttonNegative: 'Deny',
+            buttonPositive: 'Allow',
+            message: 'To provide the best experience, we need access to your storage.'
+          }
+
         );
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -77,10 +78,14 @@ const AllBooks = ({navigation}: any) => {
   const exportDataToExcel = () => {
     let wb = XLSX.utils.book_new();
     let ws = XLSX.utils.json_to_sheet(bookData);
-    XLSX.utils.book_append_sheet(wb, ws, 'Users');
+    XLSX.utils.book_append_sheet(wb, ws, 'All Books');
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 
-    writeFile(DownloadDirectoryPath + '/Allbooks.xlsx', wbout, 'ascii')
+    writeFile(
+      DownloadDirectoryPath + `/Allbooks.xlsx`,
+      wbout,
+      'ascii',
+    )
       .then(async r => {
         console.log('Success');
         return setIsModelVisible(true);
@@ -113,9 +118,8 @@ const AllBooks = ({navigation}: any) => {
 
     setBookData(existingDataArray);
   };
-
+  
   useEffect(() => {
-    console.log('hello');
     getData();
   }, []);
 
@@ -127,7 +131,7 @@ const AllBooks = ({navigation}: any) => {
         modalImage={Images.SucessIcon}
         title={'Success'}
         bgColor={'rgba(41, 172, 68, 1)'}
-        description={"All book's downloaded successfully."}
+        description={"All books downloaded successfully."}
         onClose={handleHideModal}
         buttonText={'Ok'}
       />
@@ -167,7 +171,7 @@ const AllBooks = ({navigation}: any) => {
           />
         ) : (
           <View style={{alignItems: 'center'}}>
-            <View style={{height:"50%"}}/>
+            <View style={{height: '50%'}} />
             <Text
               style={{
                 fontFamily: Fonts.POPPINS_SEMI_BOLD,

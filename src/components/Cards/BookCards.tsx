@@ -7,9 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  // Share,
+  Share,
 } from 'react-native';
-import Share from 'react-native-share';
+// import Share from 'react-native-share';
 
 import {Colors, Fonts, Images} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
@@ -17,13 +17,21 @@ import {useNavigation} from '@react-navigation/native';
 const BookCards = ({title, authors, publisher, publishedDate, item}: any) => {
   const navigation: any = useNavigation();
 
-  const onShare = async (title: any, image: any) => {
-    const shareOptions: any = {
-      title: title,
-      url: image,
-    };
+  const onShare = async (title: any, authors: string, image: any) => {
+    const sharedContent: any = `Book title: ${title} Authors: ${authors ? authors : "" }\n\n${image ? image : ""}`;
 
-    const shareResponse = await Share.open(shareOptions);
+    try {
+      const result = await Share.share({
+        message: sharedContent,
+      });
+      if (result.action === Share.sharedAction) {
+        // Content was successfully shared
+      } else if (result.action === Share.dismissedAction) {
+        // Share was dismissed
+      }
+    } catch (error: any) {
+      console.error('Error sharing content:', error.message);
+    }
   };
 
   return (
@@ -70,7 +78,7 @@ const BookCards = ({title, authors, publisher, publishedDate, item}: any) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            onShare(title, item?.image);
+            onShare(title, authors, item?.image);
           }}>
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>

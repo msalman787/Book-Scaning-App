@@ -30,21 +30,23 @@ const BookDetails = ({navigation, route}: any) => {
 
   const authors = result?.authors;
   const authorsString = authors && authors.join(', ');
+  let timeStamp = new Date().toISOString();
 
   const data = [
     {
       image: result?.imageLinks?.smallThumbnail,
       title: result?.title,
-      pageCount: result?.pageCount,
-      authors: result?.authors,
-      averageRating: result?.averageRating,
-      ratingsCount: result?.ratingsCount,
+      authors: authorsString,
       publisher: result?.publisher,
       publishedDate: result?.publishedDate,
-      maturityLevel: result?.maturityRating,
       categories: result?.categories,
-      description: result?.description,
       language: result?.language,
+      maturityLevel: result?.maturityRating,
+      averageRating: result?.averageRating,
+      ratingsCount: result?.ratingsCount,
+      pageCount: result?.pageCount,
+      description: result?.description,
+      addedOn:timeStamp
     },
   ];
   const handleCloseInput = () => {
@@ -62,16 +64,17 @@ const BookDetails = ({navigation, route}: any) => {
     const newData = {
       image: result?.imageLinks?.smallThumbnail,
       title: result?.title,
-      pageCount: result?.pageCount,
-      authors: result?.authors,
-      averageRating: result?.averageRating,
-      ratingsCount: result?.ratingsCount,
+      authors: authorsString,
       publisher: result?.publisher,
       publishedDate: result?.publishedDate,
-      maturityLevel: result?.maturityRating,
       categories: result?.categories,
-      description: result?.description,
       language: result?.language,
+      maturityLevel: result?.maturityRating,
+      averageRating: result?.averageRating,
+      ratingsCount: result?.ratingsCount,
+      pageCount: result?.pageCount,
+      description: result?.description,
+      addedOn:timeStamp
     };
 
     const getBookData: any = await AsyncStorage.getItem('books');
@@ -90,7 +93,7 @@ const BookDetails = ({navigation, route}: any) => {
         return;
       }
       // // existingDataArray.authors
-      existingDataArray.push(newData);
+      existingDataArray.unshift(newData);
       const updatedDataJson = JSON.stringify(existingDataArray);
       await AsyncStorage.setItem('books', updatedDataJson);
     } else {
@@ -176,7 +179,7 @@ const BookDetails = ({navigation, route}: any) => {
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Maturity Level:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.maturityRating ? result?.maturityRating : 'NOT_MATURE'}
+              {result?.maturityRating  || result?.maturityRating }
             </Text>
           </View>
           <View style={styles.titleauthorsContainer}>
