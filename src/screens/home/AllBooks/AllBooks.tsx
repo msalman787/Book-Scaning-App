@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   PermissionsAndroid,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import {
   DynamicStatusBar,
@@ -11,18 +12,20 @@ import {
   BookCards,
   ValidationModel,
 } from '../../../components';
-import {Colors, Images} from '../../../constants';
+import {Colors, Fonts, Images} from '../../../constants';
 import {verticalScale} from '../../../utils/Dimentions';
 import {writeFile, readFile, DownloadDirectoryPath} from 'react-native-fs';
 import XLSX from 'xlsx';
 import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AllBooks = ({navigation}: any) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isModelVisible, setIsModelVisible] = useState(false);
-  const uniqueId:any = DeviceInfo.getAndroidId();
-// test phone id: 012493c7e8051e75
-// My phone id: 883a64c6f5b2c0c3
+  const uniqueId: any = DeviceInfo.getAndroidId();
+  const [bookData, setBookData] = useState<any | []>([]);
+  // test phone id: 012493c7e8051e75
+  // My phone id: 883a64c6f5b2c0c3
   console.log(uniqueId._j);
   const handleToggleInput = () => {
     if (isInputVisible) {
@@ -31,65 +34,6 @@ const AllBooks = ({navigation}: any) => {
       setInputVisible(!isInputVisible);
     }
   };
-
-  const data = [
-    {
-      id: '1',
-      image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '2',
-      image: Images.StoreImg,
-      title: 'Zero To One',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '3',
-      image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '4',
-      image: Images.StoreImg,
-      title: 'Zero To One',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '5',
-      image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '6',
-      image: Images.StoreImg,
-      title: 'Zero To One',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-    {
-      id: '7',
-      image: Images.StoreImg,
-      title: 'Goodnight, Goodnight Construction Site',
-      authors: 'Sherri Duskey Rinker',
-      publisher: 'Chronicle Books Llc',
-      publishedDate: '2011-05-04',
-    },
-  ];
 
   const handleClick = async () => {
     try {
@@ -132,11 +76,11 @@ const AllBooks = ({navigation}: any) => {
 
   const exportDataToExcel = () => {
     let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(data);
+    let ws = XLSX.utils.json_to_sheet(bookData);
     XLSX.utils.book_append_sheet(wb, ws, 'Users');
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 
-    writeFile(DownloadDirectoryPath + '/Albook.xlsx', wbout, 'ascii')
+    writeFile(DownloadDirectoryPath + '/Allbooks.xlsx', wbout, 'ascii')
       .then(async r => {
         console.log('Success');
         return setIsModelVisible(true);
@@ -151,24 +95,29 @@ const AllBooks = ({navigation}: any) => {
   const handleSearchTextChange = (text: any) => {
     setSearchText(text);
   };
-  const filteredData = data.filter((item: any) =>
-    item?.title?.toLowerCase().includes(searchText.toLowerCase()),
-  );
+  const filteredData =
+    bookData &&
+    bookData.filter((item: any) => {
+      return item?.title?.toLowerCase().includes(searchText.toLowerCase());
+    });
   const onSecondIconPress = async () => {
     await navigation.navigate('Scanner');
   };
   const handleHideModal = () => {
     return setIsModelVisible(false);
   };
-  const renderCardRow = ({item}: any) => (
-    <BookCards
-      title={item.title}
-      authors={item.authors}
-      image={item.image}
-      publisher={item.publisher}
-      publishedDate={item.publishedDate}
-    />
-  );
+
+  const getData = async () => {
+    const getBookData: any = await AsyncStorage.getItem('books');
+    const existingDataArray = JSON.parse(getBookData);
+
+    setBookData(existingDataArray);
+  };
+
+  useEffect(() => {
+    console.log('hello');
+    getData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -199,11 +148,37 @@ const AllBooks = ({navigation}: any) => {
         />
       </View>
       <View style={styles.cardsContainer}>
-        <FlatList
-          data={filteredData}
-          renderItem={renderCardRow}
-          keyExtractor={item => item.id}
-        />
+        {filteredData?.length > 0 ? (
+          <FlatList
+            data={filteredData}
+            renderItem={({item}) => {
+              return (
+                <BookCards
+                  title={item.title}
+                  authors={item.authors}
+                  image={item.image}
+                  publisher={item.publisher}
+                  publishedDate={item.publishedDate}
+                  item={item}
+                />
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        ) : (
+          <View style={{alignItems: 'center'}}>
+            <View style={{height:"50%"}}/>
+            <Text
+              style={{
+                fontFamily: Fonts.POPPINS_SEMI_BOLD,
+                fontSize: 25,
+                textAlign: 'center',
+                alignSelf: 'center',
+              }}>
+              No Books Found
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

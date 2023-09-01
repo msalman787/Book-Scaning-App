@@ -24,10 +24,11 @@ const Scanner = ({navigation}: any) => {
         .then(async (response: any) => {
           let result = JSON.parse(response.request._response);
           if (result?.items) {
-            console.log("if",result)
-            return await navigation.navigate('BookDetails', {result});
+            return await navigation.navigate('BookDetails', {
+              result: result?.items[0]?.volumeInfo,
+              save: true,
+            });
           } else {
-            console.log("else",result)
             return setState(prevState => ({
               ...prevState,
               isValidate: !prevState.isValidate,

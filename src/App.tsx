@@ -45,11 +45,11 @@ const App = () => {
           buttonText={'Ok'}
         />
       )}
-      {isLoading && (
+      {/* {isLoading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={Colors.DEFAULT_BLACK} />
         </View>
-      )}
+      )} */}
     </NavigationContainer>
   );
 };

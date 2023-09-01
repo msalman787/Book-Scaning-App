@@ -7,41 +7,49 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Share,
+  // Share,
 } from 'react-native';
-import {Colors, Fonts, Images} from '../../constants';
+import Share from 'react-native-share';
 
-const BookCards = ({title, authors, publisher, publishedDate}: any) => {
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message: title,
-      });
-  
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Shared successfully
-          console.log('Shared successfully');
-        } else {
-          // Shared successfully
-          console.log('Shared successfully');
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // Share dismissed
-        console.log('Share dismissed');
-      }
-    } catch (error:any) {
-      console.error('Error sharing text:', error.message);
-    }
+import {Colors, Fonts, Images} from '../../constants';
+import {useNavigation} from '@react-navigation/native';
+
+const BookCards = ({title, authors, publisher, publishedDate, item}: any) => {
+  const navigation: any = useNavigation();
+
+  const onShare = async (title: any, image: any) => {
+    const shareOptions: any = {
+      title: title,
+      url: image,
+    };
+
+    const shareResponse = await Share.open(shareOptions);
   };
-  
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => {
+        // console.log({item});
+        navigation.navigate('BookDetails', {
+          result: item,
+          save: false,
+        });
+      }}>
       <View style={styles.rowContainer}>
-        <Image
-          source={{uri: 'http://books.google.com/books/content?id=latAngEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api'}}
-          style={styles.image}
-        />
+        {item?.image ? (
+          <Image
+            source={{
+              uri: item?.image,
+            }}
+            style={styles.image}
+          />
+        ) : (
+          <Image
+            source={require('../../assets/images/bookNotFound.png')}
+            style={styles.image}
+          />
+        )}
         <View style={styles.titleauthorsContainer}>
           <Text style={styles.title}>Title: {title}</Text>
           <View style={{flexDirection: 'row'}}>
@@ -52,18 +60,22 @@ const BookCards = ({title, authors, publisher, publishedDate}: any) => {
               styles.title,
               {fontSize: 12, color: 'rgba(105, 119, 132, 1)'},
             ]}>
-            Published date: {publishedDate}
+            Published date: {publishedDate ? publishedDate : 'Not Defined'}
           </Text>
         </View>
       </View>
       <View style={styles.horizontalBorder} />
       <View style={styles.rowContainer}>
         <Text style={styles.publisher}>Publisher: {publisher}</Text>
-        <TouchableOpacity style={styles.button} onPress={onShare}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            onShare(title, item?.image);
+          }}>
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -84,7 +96,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 100,
-    height: 120,
+    height: 150,
     marginRight: 16,
     borderRadius: 8,
   },

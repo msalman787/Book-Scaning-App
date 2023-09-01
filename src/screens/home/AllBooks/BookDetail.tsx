@@ -6,24 +6,110 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React from 'react';
-import {Colors, Fonts} from '../../../constants';
+import React, {useState} from 'react';
+import {Colors, Fonts, Images} from '../../../constants';
 import {
   HeaderWithSearchInput,
   LargeButton,
   TextSeemore,
+  ValidationModel,
 } from '../../../components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BookDetails = ({navigation, route}: any) => {
   const {result} = route.params;
-  const authors = result?.items[0]?.volumeInfo?.authors;
-  // console.log(authors);
+  const {save} = route.params;
+  const [state, setState] = useState({
+    title: 'Sorry!',
+    bgColor: '',
+    image: Images.WrongIcon,
+    description: 'This book already exist.',
+    buttonText: 'Ok',
+    isValidate: false,
+  });
+
+  const authors = result?.authors;
   const authorsString = authors && authors.join(', ');
+
+  const data = [
+    {
+      image: result?.imageLinks?.smallThumbnail,
+      title: result?.title,
+      pageCount: result?.pageCount,
+      authors: result?.authors,
+      averageRating: result?.averageRating,
+      ratingsCount: result?.ratingsCount,
+      publisher: result?.publisher,
+      publishedDate: result?.publishedDate,
+      maturityLevel: result?.maturityRating,
+      categories: result?.categories,
+      description: result?.description,
+      language: result?.language,
+    },
+  ];
   const handleCloseInput = () => {
     navigation.goBack();
   };
+  const handleHideModal = () => {
+    navigation.replace('AllBooks');
+    setState(prevState => ({
+      ...prevState,
+      isValidate: !prevState.isValidate,
+    }));
+  };
+
+  const saveData = async () => {
+    const newData = {
+      image: result?.imageLinks?.smallThumbnail,
+      title: result?.title,
+      pageCount: result?.pageCount,
+      authors: result?.authors,
+      averageRating: result?.averageRating,
+      ratingsCount: result?.ratingsCount,
+      publisher: result?.publisher,
+      publishedDate: result?.publishedDate,
+      maturityLevel: result?.maturityRating,
+      categories: result?.categories,
+      description: result?.description,
+      language: result?.language,
+    };
+
+    const getBookData: any = await AsyncStorage.getItem('books');
+
+    const existingDataArray = getBookData ? JSON.parse(getBookData) : [];
+
+    if (existingDataArray.length > 0) {
+      const filteredTitles = existingDataArray.filter(
+        (item: any) => item.title === result?.title,
+      );
+      if (filteredTitles.length > 0) {
+        setState(prevState => ({
+          ...prevState,
+          isValidate: !prevState.isValidate,
+        }));
+        return;
+      }
+      // // existingDataArray.authors
+      existingDataArray.push(newData);
+      const updatedDataJson = JSON.stringify(existingDataArray);
+      await AsyncStorage.setItem('books', updatedDataJson);
+    } else {
+      const bookDataToString: any = await JSON.stringify(data);
+      await AsyncStorage.setItem('books', bookDataToString);
+    }
+    navigation.replace('AllBooks');
+  };
   return (
     <ScrollView style={styles.container}>
+      <ValidationModel
+        isVisible={state.isValidate}
+        modalImage={state.image}
+        title={state.title}
+        bgColor={state.bgColor}
+        description={state.description}
+        onClose={handleHideModal}
+        buttonText={state.buttonText}
+      />
       <View style={styles.header}>
         <HeaderWithSearchInput
           title="Book Details"
@@ -33,10 +119,10 @@ const BookDetails = ({navigation, route}: any) => {
       </View>
       <View style={styles.card}>
         <View style={styles.rowContainer}>
-          {result?.items[0]?.volumeInfo?.imageLinks?.smallThumbnail ? (
+          {result?.imageLinks?.smallThumbnail || result.image ? (
             <Image
               source={{
-                uri: result?.items[0]?.volumeInfo?.imageLinks?.smallThumbnail,
+                uri: result?.imageLinks?.smallThumbnail || result.image,
               }}
               style={styles.image}
             />
@@ -48,28 +134,24 @@ const BookDetails = ({navigation, route}: any) => {
           )}
           <View style={styles.titleauthorsContainer}>
             <View>
-              <Text style={styles.title}>
-                {result?.items[0]?.volumeInfo?.title}
-              </Text>
-              {result?.items[0]?.volumeInfo?.pageCount > 0 && (
+              <Text style={styles.title}>{result?.title}</Text>
+              {result?.pageCount > 0 && (
                 <Text style={styles.authors}>
-                  {`(${result?.items[0]?.volumeInfo?.pageCount}) Pages`}
+                  {`${result?.pageCount} Pages`}
                 </Text>
               )}
             </View>
             <View>
               <Text style={styles.authors}>Author:</Text>
               <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-                {authorsString || result?.items[0]?.volumeInfo.authors}
+                {authorsString || result?.authors}
               </Text>
             </View>
-            {result?.items[0]?.volumeInfo.averageRating && (
+            {result?.averageRating && (
               <View>
                 <Text style={styles.authors}>Ratings:</Text>
                 <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-                  {`${result?.items[0]?.volumeInfo.averageRating}(${
-                    result?.items[0]?.volumeInfo?.ratingsCount || 0
-                  })`}
+                  {`${result?.averageRating}(${result?.ratingsCount})`}
                 </Text>
               </View>
             )}
@@ -79,13 +161,13 @@ const BookDetails = ({navigation, route}: any) => {
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Publisher:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.items[0]?.volumeInfo?.publisher}
+              {result?.publisher}
             </Text>
           </View>
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Publish Date:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.items[0]?.volumeInfo?.publishedDate}
+              {result?.publishedDate ? result?.publishedDate : 'Not Defined'}
             </Text>
           </View>
         </View>
@@ -94,13 +176,13 @@ const BookDetails = ({navigation, route}: any) => {
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Maturity Level:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.items[0]?.volumeInfo?.maturityRating}
+              {result?.maturityRating ? result?.maturityRating : 'NOT_MATURE'}
             </Text>
           </View>
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Language:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.items[0]?.volumeInfo?.language.toUpperCase()}
+              {result?.language}
             </Text>
           </View>
         </View>
@@ -114,29 +196,25 @@ const BookDetails = ({navigation, route}: any) => {
               flexDirection: 'row',
               flexWrap: 'wrap',
             }}>
-            {result?.items[0]?.volumeInfo?.categories && result?.items[0]?.volumeInfo?.categories.map(
-              (item: any, i: number) => (
+            {result?.categories &&
+              result?.categories.map((item: any, i: number) => (
                 <Text key={i} style={styles.flavorText}>
                   {item}
                 </Text>
-              ),
-            )}
+              ))}
           </View>
         </View>
 
         <View style={{paddingVertical: 10}}>
           <Text style={styles.authors}>Description:</Text>
-          <TextSeemore
-            description={result?.items[0]?.volumeInfo?.description}
-          />
+          <TextSeemore description={result?.description} />
         </View>
 
-        <View>
-          <LargeButton
-            // onPress={}
-            text={'Save'}
-          />
-        </View>
+        {save && (
+          <View>
+            <LargeButton onPress={saveData} text={'Save'} />
+          </View>
+        )}
       </View>
     </ScrollView>
   );
