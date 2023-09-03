@@ -46,14 +46,14 @@ const AllBooks = ({navigation}: any) => {
         // Ask for permission
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
+          {
             title: 'Permission Required',
             buttonNeutral: 'Remind Me Later',
             buttonNegative: 'Deny',
             buttonPositive: 'Allow',
-            message: 'To provide the best experience, we need access to your storage.'
-          }
-
+            message:
+              'To provide the best experience, we need access to your storage.',
+          },
         );
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -76,16 +76,31 @@ const AllBooks = ({navigation}: any) => {
   };
 
   const exportDataToExcel = () => {
+    const exportData = bookData?.map((item: any) => {
+      const categories = Array.isArray(item?.categories) && item?.categories;
+      const categoriesString = categories && categories.join(', ');
+      return {
+        image: item?.image,
+        title: item?.title,
+        authors: item?.authors,
+        publisher: item?.publisher,
+        publishedDate: item?.publishedDate,
+        categories: categoriesString,
+        language: item?.language,
+        maturityLevel: item?.maturityLevel,
+        averageRating: item?.averageRating,
+        ratingsCount: item?.ratingsCount,
+        pageCount: item?.pageCount,
+        description: item?.description,
+        addedOn: item?.addedOn,
+      };
+    });
     let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(bookData);
+    let ws = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(wb, ws, 'All Books');
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 
-    writeFile(
-      DownloadDirectoryPath + `/Allbooks.xlsx`,
-      wbout,
-      'ascii',
-    )
+    writeFile(DownloadDirectoryPath + `/Allbooks.xlsx`, wbout, 'ascii')
       .then(async r => {
         console.log('Success');
         return setIsModelVisible(true);
@@ -107,6 +122,7 @@ const AllBooks = ({navigation}: any) => {
     });
   const onSecondIconPress = async () => {
     await navigation.navigate('Scanner');
+    getData()
   };
   const handleHideModal = () => {
     return setIsModelVisible(false);
@@ -118,7 +134,7 @@ const AllBooks = ({navigation}: any) => {
 
     setBookData(existingDataArray);
   };
-  
+
   useEffect(() => {
     getData();
   }, []);
@@ -131,7 +147,7 @@ const AllBooks = ({navigation}: any) => {
         modalImage={Images.SucessIcon}
         title={'Success'}
         bgColor={'rgba(41, 172, 68, 1)'}
-        description={"All books downloaded successfully."}
+        description={'All books downloaded successfully.'}
         onClose={handleHideModal}
         buttonText={'Ok'}
       />

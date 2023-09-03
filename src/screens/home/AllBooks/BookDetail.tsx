@@ -28,7 +28,7 @@ const BookDetails = ({navigation, route}: any) => {
     isValidate: false,
   });
 
-  const authors = result?.authors;
+  const authors = Array.isArray(result?.authors) && result?.authors;
   const authorsString = authors && authors.join(', ');
   let timeStamp = new Date().toISOString();
 
@@ -36,7 +36,7 @@ const BookDetails = ({navigation, route}: any) => {
     {
       image: result?.imageLinks?.smallThumbnail,
       title: result?.title,
-      authors: authorsString,
+      authors: result?.authors,
       publisher: result?.publisher,
       publishedDate: result?.publishedDate,
       categories: result?.categories,
@@ -179,7 +179,7 @@ const BookDetails = ({navigation, route}: any) => {
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Maturity Level:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.maturityRating  || result?.maturityRating }
+              {result?.maturityRating  || result?.maturityLevel}
             </Text>
           </View>
           <View style={styles.titleauthorsContainer}>
