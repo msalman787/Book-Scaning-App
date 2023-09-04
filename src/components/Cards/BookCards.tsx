@@ -18,7 +18,7 @@ const BookCards = ({title, authors, publisher, publishedDate, item}: any) => {
   const navigation: any = useNavigation();
 
   const onShare = async (title: any, authors: string, image: any) => {
-    const sharedContent: any = `Book title: ${title} Authors: ${authors ? authors : "" }\n\n${image ? image : ""}`;
+    const sharedContent: any = `Book title: ${title}\n Authors: ${authors ? authors : "" }\n\n${image ? image : ""}`;
 
     try {
       const result = await Share.share({
@@ -90,8 +90,9 @@ const BookCards = ({title, authors, publisher, publishedDate, item}: any) => {
 const styles = StyleSheet.create({
   card: {
     marginVertical: 5,
+    marginHorizontal: 10,
     backgroundColor: Colors.DEFAULT_WHITE,
-    borderRadius: 8,
+    borderRadius: 15,
     padding: 16,
     elevation: 4,
     shadowOffset: {width: 0, height: 2},

@@ -83,7 +83,7 @@ const HeaderWithSearchInput = ({
           )}
            {thirdIcon && (
             <TouchableOpacity style={styles.icon} onPress={onThirdIconPress}>
-              <Icon3 color="black" style={styles.searchIcon2} />
+              <Icon3 color="black" style={{height:30,width:30}} />
             </TouchableOpacity>
           )}
         </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.POPPINS_REGULAR,
     padding: 8,
     borderRadius: 10,
-    width: horizontalScale(195),
+    width: horizontalScale(190),
   },
   icon: {
     backgroundColor: Colors.DEFAULT_WHITE,

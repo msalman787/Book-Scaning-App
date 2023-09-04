@@ -4,6 +4,7 @@ import {
   PermissionsAndroid,
   StyleSheet,
   View,
+  Platform,
   Text,
 } from 'react-native';
 import {
@@ -37,6 +38,9 @@ const AllBooks = ({navigation}: any) => {
 
   const handleClick = async () => {
     try {
+      if (Platform.OS === 'android' && Platform.Version === 33) {
+        return exportDataToExcel();
+      }
       // Check for Permission (check if permission is already given or not)
       let isPermitedExternalStorage = await PermissionsAndroid.check(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -121,8 +125,8 @@ const AllBooks = ({navigation}: any) => {
       return item?.title?.toLowerCase().includes(searchText.toLowerCase());
     });
   const onSecondIconPress = async () => {
-    await navigation.navigate('Scanner');
-    getData()
+    await getData();
+    return await navigation.navigate('Scanner');
   };
   const handleHideModal = () => {
     return setIsModelVisible(false);
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     paddingVertical: verticalScale(5),
-    paddingHorizontal: verticalScale(10),
+    // paddingHorizontal: verticalScale(10),
     paddingBottom: 75,
   },
 });

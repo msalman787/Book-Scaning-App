@@ -30,27 +30,27 @@ import {useDispatch, useSelector} from 'react-redux';
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
-  const [initialLaunch, setInitialLaunch] = useState(true);
-  const isAuthenticated = useSelector(
-    (state: any) => state.auth.isAuthenticated,
-  );
-  const dispatch = useDispatch();
+  // const [initialLaunch, setInitialLaunch] = useState(true);
+  // const isAuthenticated = useSelector(
+  //   (state: any) => state.auth.isAuthenticated,
+  // );
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInitialLaunch(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setInitialLaunch(false);
+  //   }, 3000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      const authenticated = await AsyncStorage.getItem('authenticated');
-      dispatch(setAuthenticated(authenticated === 'true'));
-    };
+  // useEffect(() => {
+  //   const checkAuthentication = async () => {
+  //     const authenticated = await AsyncStorage.getItem('authenticated');
+  //     dispatch(setAuthenticated(authenticated === 'true'));
+  //   };
 
-    checkAuthentication();
-  }, [dispatch]);
+  //   checkAuthentication();
+  // }, [dispatch]);
 
   return (
     <Stack.Navigator>
