@@ -17,8 +17,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BookDetails = ({navigation, route}: any) => {
-  const {result} = route.params;
-  const {save} = route.params;
+  const {result, save , isbn} = route.params;
   const [state, setState] = useState({
     title: 'Sorry!',
     bgColor: '',
@@ -28,12 +27,12 @@ const BookDetails = ({navigation, route}: any) => {
     isValidate: false,
   });
 
-  const authors = Array.isArray(result?.authors) && result?.authors;
-  const authorsString = authors && authors.join(', ');
+  const authorsString = Array.isArray(result?.authors) ? result?.authors.join(', ') : result?.authors;
   let timeStamp = new Date().toISOString();
 
   const data = [
     {
+      isbn,
       image: result?.imageLinks?.smallThumbnail,
       title: result?.title,
       authors: result?.authors,
@@ -62,9 +61,10 @@ const BookDetails = ({navigation, route}: any) => {
 
   const saveData = async () => {
     const newData = {
+      isbn,
       image: result?.imageLinks?.smallThumbnail,
       title: result?.title,
-      authors: authorsString,
+      authors: result?.authors,
       publisher: result?.publisher,
       publishedDate: result?.publishedDate,
       categories: result?.categories,
@@ -147,7 +147,7 @@ const BookDetails = ({navigation, route}: any) => {
             <View>
               <Text style={styles.authors}>Author:</Text>
               <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-                {authorsString || result?.authors}
+                {authorsString}
               </Text>
             </View>
             {result?.averageRating && (
@@ -170,7 +170,7 @@ const BookDetails = ({navigation, route}: any) => {
           <View style={styles.titleauthorsContainer}>
             <Text style={styles.authors}>Publish Date:</Text>
             <Text style={[styles.authors, {color: Colors.DEFAULT_BLACK}]}>
-              {result?.publishedDate ? result?.publishedDate : 'Not Defined'}
+              {result?.publishedDate || result?.publishedDate }
             </Text>
           </View>
         </View>
