@@ -27,6 +27,7 @@ const Scanner = ({navigation}: any) => {
             return await navigation.navigate('BookDetails', {
               result: result?.items[0]?.volumeInfo,
               save: true,
+              isbn: e.data
             });
           } else {
             return setState(prevState => ({
