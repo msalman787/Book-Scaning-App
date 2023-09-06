@@ -15,7 +15,13 @@ import {
 } from '../../../components';
 import {Colors, Fonts, Images} from '../../../constants';
 import {verticalScale} from '../../../utils/Dimentions';
-import {writeFile, readFile, DownloadDirectoryPath} from 'react-native-fs';
+import {
+  writeFile,
+  readFile,
+  DownloadDirectoryPath,
+  ExternalStorageDirectoryPath,
+  mkdir,
+} from 'react-native-fs';
 import XLSX from 'xlsx';
 // import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -105,19 +111,33 @@ const AllBooks = ({navigation}: any) => {
       };
     });
     if (exportData) {
-      let wb = XLSX.utils.book_new();
-      let ws = XLSX.utils.json_to_sheet(exportData);
-      XLSX.utils.book_append_sheet(wb, ws, 'All Books');
-      const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
+      try {
+        const DownloadDirectoryPath = `${ExternalStorageDirectoryPath}/PawBookFinder`;
 
-      writeFile(DownloadDirectoryPath + `/Allbooks.xlsx`, wbout, 'ascii')
-        .then(async r => {
-          console.log('Success');
-          return setIsModelVisible(true);
-        })
-        .catch(e => {
-          console.log('Error', e);
-        });
+        // Create the directory if it doesn't exist
+        await mkdir(DownloadDirectoryPath);
+
+        // Create a new Excel workbook and add a worksheet with your data
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        XLSX.utils.book_append_sheet(wb, ws, 'All Books');
+
+        // Write the Excel workbook to a binary format
+        const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
+
+        // Define the file path for the Excel file
+        const excelFilePath = `${DownloadDirectoryPath}/Allbooks${new Date().getUTCMilliseconds()}.xlsx`;
+
+        // Write the binary Excel data to the file
+        await writeFile(excelFilePath, wbout, 'ascii');
+
+        console.log('Excel file saved successfully at:', excelFilePath);
+        setIsModelVisible(true);
+        return 'Success';
+      } catch (error) {
+        console.error('Error:', error);
+        return 'Error';
+      }
     }
   };
 
