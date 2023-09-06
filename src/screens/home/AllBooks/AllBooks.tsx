@@ -44,10 +44,6 @@ const AllBooks = ({navigation}: any) => {
 
   const handleClick = async () => {
     try {
-      if (Platform.OS === 'android' && Platform.Version === 33) {
-        return exportDataToExcel();
-      }
-      // Check for Permission (check if permission is already given or not)
       let isPermitedExternalStorage = await PermissionsAndroid.check(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       );
@@ -66,17 +62,13 @@ const AllBooks = ({navigation}: any) => {
           },
         );
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          // Permission Granted (calling our exportDataToExcel function)
-          exportDataToExcel();
-          console.log('Permission granted');
-        } else {
-          // Permission denied
-          console.log('Permission denied');
+        if (!granted) {
+          return false;
         }
-      } else {
-        // Already have Permission (calling our exportDataToExcel function)
-        exportDataToExcel();
+      }
+
+      if (Platform.OS === 'android') {
+        return exportDataToExcel(Platform.Version);
       }
     } catch (e) {
       console.log('Error while checking permission');
@@ -85,7 +77,7 @@ const AllBooks = ({navigation}: any) => {
     }
   };
 
-  const exportDataToExcel = async () => {
+  const exportDataToExcel = async (androidVersion: number = 29) => {
     const exportData = await bookData?.map((item: any) => {
       const categoriesString = Array.isArray(item?.categories)
         ? item?.categories.join(', ')
@@ -112,11 +104,14 @@ const AllBooks = ({navigation}: any) => {
     });
     if (exportData) {
       try {
-        const DownloadDirectoryPath = `${ExternalStorageDirectoryPath}/PawBookFinder`;
+        const DownloadDirectoryPath =
+          androidVersion >= 30
+            ? `${ExternalStorageDirectoryPath}/Download/PawBookFinder`
+            : `${ExternalStorageDirectoryPath}/PawBookFinder`;
 
         // Create the directory if it doesn't exist
+        console.log({DownloadDirectoryPath});
         await mkdir(DownloadDirectoryPath);
-
         // Create a new Excel workbook and add a worksheet with your data
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(exportData);
@@ -126,7 +121,7 @@ const AllBooks = ({navigation}: any) => {
         const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 
         // Define the file path for the Excel file
-        const excelFilePath = `${DownloadDirectoryPath}/Allbooks${new Date().getUTCMilliseconds()}.xlsx`;
+        const excelFilePath = `${DownloadDirectoryPath}/Allbooks_${new Date().getTime()}.xlsx`;
 
         // Write the binary Excel data to the file
         await writeFile(excelFilePath, wbout, 'ascii');
