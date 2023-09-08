@@ -1,4 +1,4 @@
-package com.posh;
+package com.pawbookfinder;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

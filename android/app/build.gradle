@@ -74,9 +74,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.posh"
+    namespace "com.pawbookfinder"
     defaultConfig {
-        applicationId "com.posh"
+        applicationId "com.pawbookfinder"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
